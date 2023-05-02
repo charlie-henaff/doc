@@ -57,21 +57,39 @@ npx: ## args: c="[command]" - Execute a npx command
 
 
 ## 
+##Dependencies
+##-----------------------------------------------------------------------------
+.PHONY: installReq install update
+
+installReq: package-lock.json 
+
+package-lock.json: package.json
+	@$(DOCKER_RUN_NODE) npm install
+
+install: | package.json ## Install dependencies
+	@$(DOCKER_RUN_NODE) npm install
+
+update: | package.json ## Update dependencies
+	@$(DOCKER_RUN_NODE) npm update
+
+
+## 
 ##Project 
 ##-----------------------------------------------------------------------------
-.PHONY: build start serve
+.PHONY: buildReq build start serve
 
-package.json.lock.tmp: package.json.lock
-	@$(DOCKER_RUN_NODE) npm install
-	@touch package.json.lock.tmp
+buildReq: build/
 
-build: package.json.lock.tmp ## Build project
-	@$(DOCKER_RUN_NODE) npm build
+build/: public/ src/ node_modules/
+	@$(DOCKER_RUN_NODE) npm run build
 
-start: package.json.lock.tmp ## Start project
+build: installReq | src/ ## Build project
+	@$(DOCKER_RUN_NODE) npm run build
+
+start: installReq | src/ ## Start project
 	@$(DOCKER_RUN_NODE) npm start
 
-serve: package.json.lock.tmp build  ## Serve project
-	@$(DOCKER_RUN_NODE) npm serve -s build
+serve: installReq buildReq ## Serve project
+	@$(DOCKER_RUN_NODE) sh -c "npm install -g serve && serve -s build"
 
 ##
