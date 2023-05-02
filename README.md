@@ -1,4 +1,4 @@
 # Documentation  
 Some documentation about utils
 
-- [makefile sample](./makefile.md)
+- [Makefile template](makefile/README.md)
