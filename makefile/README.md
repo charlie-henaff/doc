@@ -1,9 +1,10 @@
 # Makefile
+
 Makefile basic template inspired by [Kévin Dunglas](https://github.com/dunglas/symfony-docker/blob/main/docs/makefile.md).  
 
 To use it, create a new `Makefile` file at the root of your project.  
-Copy/paste the content in the template section.   
-To view all the available commands, run `make`. 
+Copy/paste the content in the template section.
+To view all the available commands, run `make`.
 
 You can find a more complete symfony based example in this [snippet](https://www.strangebuzz.com/en/snippets/the-perfect-makefile-for-symfony).  
 
@@ -23,18 +24,18 @@ DOCKER_COMP = docker compose
 ## 
 ## —— 😎 My super Makefile 😎 ——————————————————————————————————————————————
 help: ## Outputs this help screen
-	@grep -E '(^[a-zA-Z0-9\./_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
+    @grep -E '(^[a-zA-Z0-9\./_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
 
 ## 
 ## —— Project1 🚀 ———————————————————————————————————————————————————————————
 start_project1: ## Start project1
-  @$(DOCKER_COMP) up -d project1
+    @$(DOCKER_COMP) up -d project1
 
 .PHONY: start_project1
 
 ## 
 ```
 
-## Samples 
+## Samples
 
 - [node-npm with only runnable docker containers](samples/node-npm.Makefile)
