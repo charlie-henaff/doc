@@ -15,7 +15,7 @@ DOCKER_RUN 				= docker run -it --rm $(DOCKER_OPT_USER)
 DOCKER_RUN_NODE     	= $(DOCKER_RUN) $(DOCKER_OPT_WORKSPACE) $(DOCKER_OPT_VOLUMES) $(DOCKER_OPT_PORTS) $(NODE_IMG)
 
 .DEFAULT_GOAL :=    	help
-.PHONY:   
+.PHONY:             	help
 
 help:
 	@grep -Eh '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
@@ -31,12 +31,12 @@ create-react-pwa: ## Create a react pwa
 
 create-react-app: ## args: t="[template]" - Create a react app
 ifneq ($(wildcard $(CURRENT_PATH)/src/.),)
-    @echo "src folder exist remove it to create an app"
+	@echo "src folder exist remove it to create an app"
 else
 ifndef template
-	@make -s npx c="create-react-app app"
+	@make -s yarn c="create react-app app"
 else
-	@make -s npx c="create-react-app app --template $(template)"
+	@make -s yarn c="create react-app app --template $(template)" 
 endif
 	@chown -R $(CURRENT_UID):$(CURRENT_GID) app/
 	@mv app/* ./ 
@@ -47,16 +47,13 @@ endif
 ##
 ##Commands 
 ##-----------------------------------------------------------------------------
-.PHONY: node npm npx
+.PHONY: node yarn
 
 node: ## args: c="[command]" - Execute a node command
 	@$(DOCKER_RUN_NODE) $(c)
  
-npm: ## args: c="[command]" - Execute a npm command 
-	@$(DOCKER_RUN_NODE) npm $(c)
-
-npx: ## args: c="[command]" - Execute a npx command
-	@$(DOCKER_RUN_NODE) npx $(c)
+yarn: ## args: c="[command]" - Execute a yarn command 
+	@$(DOCKER_RUN_NODE) yarn $(c)
 
 
 ## 
@@ -64,16 +61,16 @@ npx: ## args: c="[command]" - Execute a npx command
 ##-----------------------------------------------------------------------------
 .PHONY: installReq install update
 
-installReq: package-lock.json 
+installReq: yarn.lock
 
-package-lock.json: package.json
-	@make -s npm c=install
+yarn.lock: package.json
+	@make -s yarn c=install
 
 install: | package.json ## Install dependencies
-	@make -s npm c=install
+	@make -s yarn c=install
 
 update: | package.json ## Update dependencies
-	@make -s npm c=update
+	@make -s yarn c=upgrade
 
 
 ## 
@@ -84,15 +81,15 @@ update: | package.json ## Update dependencies
 buildReq: build/
 
 build/: public/ src/ node_modules/
-	@make -s npm c="run build"
+	@make -s yarn c=build
 
 build: installReq | src/ ## Build project
-	@make -s npm c="run build"
+	@make -s yarn c=build
 
 start: installReq | src/ ## Start project
-	@@make -s npm c=start
+	@make -s yarn c=start
 
 serve: installReq buildReq ## Serve project
-	@$(DOCKER_RUN_NODE) sh -c "npm install -g serve && serve -s build"
+	@$(DOCKER_RUN_NODE) sh -c "yarn global add serve && serve -s build"
 
 ##
