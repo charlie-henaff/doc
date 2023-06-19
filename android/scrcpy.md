@@ -1,4 +1,4 @@
-# scrcpy 
+# SCRCPY
 
 pronounced "screen copy"
 
