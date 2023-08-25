@@ -38,4 +38,6 @@ start_project1: ## Start project1
 
 ## Samples
 
-- [node-npm with only runnable docker containers](samples/node-npm.Makefile)
+- [react-npm](samples/react-npm.Makefile) : to run react app with npm
+- [react-yarn](samples/react-yarn.Makefile) : to run react app with yarn
+- [vuetify-yarn](samples/vuetify-yarn.Makefile) : to run vuetify app with yarn
