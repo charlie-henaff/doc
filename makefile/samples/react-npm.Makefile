@@ -24,7 +24,7 @@ help:
 ## 
 ##Create
 ##-----------------------------------------------------------------------------
-.PHONY: create-react-pwa create-react-app create-vuetify-app
+.PHONY: create-react-pwa create-react-app
 
 create-react-pwa: ## Create a react pwa
 	@make -s create-react-app template=cra-template-pwa
@@ -41,16 +41,6 @@ endif
 	@chown -R $(CURRENT_UID):$(CURRENT_GID) app/
 	@mv app/* ./ 
 	@rm -rf app/
-endif
-
-create-vuetify-app: ## Create a vuetify app (you must keep vuetify-project as project name)
-ifneq ($(wildcard $(CURRENT_PATH)/src/.),)
-	@echo "src folder exist remove it to create an app"
-else
-	@make -s npx c="create-vuetify"
-	@chown -R $(CURRENT_UID):$(CURRENT_GID) vuetify-project/
-	@mv vuetify-project/* ./
-	@rm -rf vuetify-project/
 endif
 
 
